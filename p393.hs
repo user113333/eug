@@ -1,26 +1,14 @@
 import Data.List
 
+-- HELPER FUNCTION
+
 chunksOf _ [] = []
 chunksOf n l = (take n l):chunksOf n (drop n l)
 
-subsets_c :: [[a]] -> [a] -> Int -> [[a]]
-subsets_c [] _ _ = []
-subsets_c l1@(x:xs) l2 n
-    | n >= length l2 = subsets_c xs l2 0
-    | otherwise = ((l2 !! n):x):(subsets_c l1 l2 (n + 1))
+-- function F splits each element of L into more elements then joins them
+split f l = concat $ map f l
 
-subsets :: [[a]] -> [a] -> [[a]]
-subsets l1 l2 = subsets_c l1 l2 0
-
--- list to list of list
-l2ll :: [a] -> [[a]]
-l2ll l = map (\x -> [x]) l
-
-combinations l = foldl subsets (l2ll $ head l) (tail l)
-
--- rect0 = [[2, 5], [1,6,3], [2,7,4], [3,8], [1,6,9], [2, 7, 10, 5], [3, 8, 11, 6], [4, 7, 12], [5, 10, 13], [6, 11, 14, 9], [7, 12, 15, 10], [8, 16, 11], [9, 14], [10, 15, 13], [11, 16, 14], [12, 15]]
--- rect2 = [1..16]
--- rect = zip rect2 rect0
+-- NEIGHBOR CREATION
 
 rect0 n = neighbors
     where normal = chunksOf n [ x | x <- [1..(n * n)] ]
@@ -32,45 +20,43 @@ rect0 n = neighbors
 rect2 n = [1..n*n]
 rect n = zip (rect2 n) (rect0 n)
 
--- hold_neck
--- release_neck
+-- ACTUAL CODE
 
--- perm l@(lx:lxs:lxss) neck@(nx:nxs:nxss) = (first, second)
-    -- where nn = hold_neck
-    --       first = map fst $ filter (\(a, b) -> b == 0) (zip lx nx)
-    --       second = map fst $ filter (\(a, b) -> b == 0) (zip lxs nxs)
-    --       comb = combinations first second
+-- wrong_path l = any (\x -> length (ges x) == 0) l
+--     where ges (_, es) = es
 
--- wrong_path = [0, (0, 0)]
+wrong_path [] = True
+wrong_path l = (length $ ges $ last l) == 0
+    where ges (_, es) = es
 
 neckit _ [] = []
 neckit _ ((_, []):_) = []
-neckit (i, e) ((xi, xe):xs) = (xi, t):(neckit (i, e) xs)
-    where t1 = xe \\ [e] -- transform 1: remove e
+neckit (i, e) ((xi, xes):xs) = (xi, t):(neckit (i, e) xs)
+    where t1 = xes \\ [e] -- transform 1: remove e
           t2 = if xi == e then (t1 \\ [i]) else t1 -- transform 2: remove i
           t = t2
 
--- for_each_es
-perm ((i, es):xs) = map complete es
-    where complete e = (neckit (i, e) xs)
+-- [a] -> [[a]]
+perm nb = (map (\e -> neckit (i, e) other) es)
+    where first = head nb
+          other = tail nb
+          i = fst first
+          es = snd first
 
-for_each_option [] = []
-for_each_option (x:xs)
-    | (length $ snd $ last x) == 0 = for_each_option xs
-    | otherwise = perm x:for_each_option xs
+each_l [] = []
+each_l (x:xs)
+    | wrong_path x = each_l xs
+    | otherwise = perm x ++ each_l xs
 
-perm_start l 0 = l
-perm_start l n = perm_start dowork (n - 1)
-    where dowork = (concat $ for_each_option l)
+begin l 0 = l
+begin l n = begin (each_l l) (n - 1)
 
--- perm_begin l = perm_start [l] ((length l) - 1)
-perm_begin l = perm_start [l] 2
+-- func n = begin [l] 4
+func n = begin [l] (length l)
+    where l = rect n
 
-func = solutions
-    where solutions = perm_begin (rect 2)
-
+-- 6m8.162s
 -- f(6) = 207408
--- func = rect 4
-
+-- NOT DONE
 main = do
-    print func
+    print $ (length $ func 6)

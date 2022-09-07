@@ -1,6 +1,5 @@
-# Haskell snippets
-
-Snippets of Haskell code
+## Notes
+-- NOT DONE -> started but not yet finished
 
 ## Useful Links
 
@@ -27,3 +26,8 @@ https://github.com/raviksharma/bartosz-basics-of-haskell
 
 Bartozs basics of Haskell  
 https://github.com/raviksharma/bartosz-basics-of-haskell
+
+Introduction to
+Programming in Haskell
+Lecture Notes, CMI, 2008
+https://www.cmi.ac.in/~madhavan/papers/pdf/haskell.pdf
