@@ -20,17 +20,18 @@ each_square (i, e) (es_i, es) = (es_i, t1 es)
 each_chain (i, e) xs = map (each_square (i, e)) xs
 
 each_option [] = []
-each_option (x:xs) = [ each_chain (hi, e) t | e <- hes ] ++ each_option xs
+each_option (x:xs)
+    | (let (i, es) = last x in es == []) = each_option xs
+    | otherwise = [ each_chain (hi, e) t | e <- hes ] ++ each_option xs
     where (hi, hes) = head x
           t = tail x
 
 start l 0 = l
 start l i = start (each_option l) (i - 1)
 
--- NOT DONE
--- f(6) = 207408 -> 5m32.868s
+-- f(6) = 207408 -> 4m40.034s
 func = length $ start [l] (length l)
-    where l = (rect 6)
+    where l = (rect 4)
 
 main = do
     print func
