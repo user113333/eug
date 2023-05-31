@@ -1,0 +1,5 @@
+#lang scheme
+
+(define (inc x) (+ 1 x))
+
+(display 'asd)
