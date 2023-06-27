@@ -6,6 +6,6 @@ pt n = pt_recursive n [1]
 
 func = pt 12
 
--- NOT DONE
+-- NOT_DONE
 main = do
     print func
