@@ -3,6 +3,8 @@
 using namespace std;
 #define ll long long
 
+// AOC23 day 1 part 2
+
 string digits[] = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
 string parse(string s) {

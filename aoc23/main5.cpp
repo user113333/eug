@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// AOC23 day 3 part 1
+
 string prev;
 string next;
 

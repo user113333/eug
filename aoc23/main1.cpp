@@ -2,6 +2,8 @@
 
 using namespace std;
 
+// AOC23 day 1 part 1
+
 int cal_value(string& s) {
     int f = -1;
     int l = -1;

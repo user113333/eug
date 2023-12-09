@@ -1,3 +1,5 @@
+-- AOC23 day 2 part 2
+
 drop_second [] = []
 drop_second (x:[]) = [x]
 drop_second (x:_:xs) = x:drop_second xs
